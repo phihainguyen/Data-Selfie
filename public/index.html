@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="../stylesheet/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Hello world</h1>
+    <h2>Geolocation</h2>
+    <p>
+      Latitude: <span id="lat"></span>°<br />Longitude: <span id="lon"></span>°
+    </p>
+    <script src="../javascript/app.js"></script>
+    <script>
+      if ("geolocation" in navigator) {
+        console.log("it is available");
+        navigator.geolocation.getCurrentPosition(position => {
+          console.log(position);
+          // console.log(position.coords.longitude);
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          document.getElementById("lat").textContent = lat;
+          document.getElementById("lon").textContent = lon;
+
+          //setting up the POST to send data which is longitude and lattitude in our case
+          const data = { lat, lon };
+          //inorder to send a post we also need a second argument which is just a javascript object we will name it "option" and that way we can set it up as a variable as well
+          //the first property we need to put in our object is the method, which could be GET, POST, DELETE, PUT, etc
+          // there are various properties we can add to this object which is further specified inside of Fetch() MDN site
+          // we will also need the body property which will convert the body of the post request, which is where all of the data is held, to json format for us, so it takes the object data and turns it into a json string
+          //since we are sending the data in json format it is useful to specify that somehwere and that is why we will also addd the header property to our javascript object. THe header is something that can packaged along with any get/post req and move back and forth between client and server side which is a way to add additional meta information
+          const options = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+          };
+          //in our fetch function .then will handle the response from the server side after recieving information in our case we will just console log the response which is basically the info that was packaged in the json from the response.json()
+          fetch("/api", options).then(response => {
+            console.log(response);
+          });
+        });
+      } else {
+        console.log("it is not availbale");
+      }
+    </script>
+  </body>
+</html>
