@@ -5,3 +5,6 @@ body {
   color: red;
   background: black;
 }
+button {
+  border: black;
+}

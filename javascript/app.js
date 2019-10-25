@@ -3,6 +3,11 @@
 //so far the server's job is to serve up any files in our "public" directory, which is index.html
 
 console.log("working");
+//next we will use NeDB as our database, we assign the imported nedb to Datastore where we will give the new variable the Datastore function which holds the path to a new file which we name as database.db
+const Datastore = require("nedb");
+const database = new Datastore("database.db");
+// the loadDatabase() function will allow us to load/create the file we fed to the Datastore()
+database.loadDatabase();
 //this allows us to use/have access to the express package we need to use require and assign it to the express variable which allows us to use it
 //Basically this is an import statement to import our node package
 const express = require("express");
@@ -61,9 +66,14 @@ app.post("/api", (request, response) => {
   //but for fun we will respond by sending back some json info
   //then in client side since we are responding on server side we need to set something in client side to recieve it
   const data = request.body;
+  const timestamp = Date.now();
+  data.timestamp = timestamp;
+  database.insert(data);
+  console.log(database);
   response.json({
     status: "successfully sent information",
     latitude: data.lat,
-    longitude: data.lon
+    longitude: data.lon,
+    timestamp: data.timestamp
   });
 });

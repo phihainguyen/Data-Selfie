@@ -13,11 +13,14 @@
     <p>
       Latitude: <span id="lat"></span>°<br />Longitude: <span id="lon"></span>°
     </p>
+    <br />
+    <button type="submit" id="submit">Submit</button>
     <script src="../javascript/app.js"></script>
     <script>
       if ("geolocation" in navigator) {
         console.log("it is available");
         //by making this callback an async function we can make the fetch function await
+
         navigator.geolocation.getCurrentPosition(async position => {
           console.log(position);
           // console.log(position.coords.longitude);
@@ -43,12 +46,17 @@
           //in our fetch function .then will handle the response from the server side after recieving information in our case we will just console log the response which is basically the info that was packaged in the json from the response.json()
           //but this will have .then() bring back the data as a data stream and not what you fed the response, in order to get around that we will handle this here on client side
           //
-          const response = await fetch("/api", options);
-          //to avoid getting a datastream as a response we will not use .then() to get back the data but an await which is why we comment out the bottom and added in a new variable that will store the response recieved on client side and store it in json() format.
-          // .then(response => {
-          //   console.log(response);
-          const json = await response.json();
-          console.log(json);
+          const submit = document.querySelector("#submit");
+          submit.addEventListener("click", clickEvent);
+
+          async function clickEvent() {
+            const response = await fetch("/api", options);
+            //to avoid getting a datastream as a response we will not use .then() to get back the data but an await which is why we comment out the bottom and added in a new variable that will store the response recieved on client side and store it in json() format.
+            // .then(response => {
+            //   console.log(response);
+            const json = await response.json();
+            console.log(json);
+          }
         });
       } else {
         console.log("it is not availbale");
