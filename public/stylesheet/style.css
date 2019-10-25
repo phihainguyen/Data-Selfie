@@ -1,0 +1,25 @@
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: red;
+  background: black;
+}
+button {
+  border: purple;
+  border-style: solid;
+  border-radius: 5px;
+  width: 90px;
+  height: 40px;
+  color: red;
+  background-color: black;
+}
+button:hover {
+  background: red;
+  color: white;
+  border-color: white;
+}
+button:active {
+  transform: translateY(4px);
+  transform: scale(0.8);
+}
