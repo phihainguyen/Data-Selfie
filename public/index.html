@@ -15,12 +15,18 @@
     </p>
     <br />
 
-    <button type="submit" class="button" id="submit">
+    <input type="text" placeholder="Mood..." id="inputText" /><button
+      type="submit"
+      class="button"
+      id="submit"
+    >
       <span>Submit</span>
     </button>
     <p>click button to submit location of the ISS</p>
     <script src="../javascript/app.js"></script>
     <script>
+      const inputText = document.querySelector("#inputText");
+      let userInput;
       if ("geolocation" in navigator) {
         console.log("it is available");
         //by making this callback an async function we can make the fetch function await
@@ -30,11 +36,12 @@
           // console.log(position.coords.longitude);
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;
-          document.getElementById("lat").textContent = lat;
+          userInput = inputText.value;
+          const input = (document.getElementById("lat").textContent = lat);
           document.getElementById("lon").textContent = lon;
 
           //setting up the POST to send data which is longitude and lattitude in our case
-          const data = { lat, lon };
+          const data = { lat, lon, userInput };
           //inorder to send a post we also need a second argument which is just a javascript object we will name it "option" and that way we can set it up as a variable as well
           //the first property we need to put in our object is the method, which could be GET, POST, DELETE, PUT, etc
           // there are various properties we can add to this object which is further specified inside of Fetch() MDN site
@@ -60,6 +67,8 @@
             //   console.log(response);
             const json = await response.json();
             console.log(json);
+            console.log(inputText.value);
+            return (userInput = inputText.value);
           }
         });
       } else {

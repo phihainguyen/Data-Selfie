@@ -60,7 +60,7 @@ app.use(express.json({ limt: "1mb" }));
 //so in index.html we can set up our post using fetch(), by fetching the post  to the endpoint /api
 app.post("/api", (request, response) => {
   //since all of aour data is in the body of our request from the client side we want to console log that and to access that we will need to console.log(request.body) this will then give back just the necessary info we need rather than getting all the meta data
-  console.log(request.body);
+  // console.log(request.body);
 
   //   with the server now recieving the data from the request it is appropriate for us on the server side to respond in a way, but we can just end it with response.end() which is minimal requirement
   //but for fun we will respond by sending back some json info
@@ -69,11 +69,28 @@ app.post("/api", (request, response) => {
   const timestamp = Date.now();
   data.timestamp = timestamp;
   database.insert(data);
-  console.log(database);
+  // console.log(database);
   response.json({
     status: "successfully sent information",
     latitude: data.lat,
     longitude: data.lon,
-    timestamp: data.timestamp
+    timestamp: data.timestamp,
+    input: data.userInput
+  });
+});
+
+//below we are now doing a get function for the get request made in the all.html file
+app.get("/api", (request, response) => {
+  //this is to test the response to see if it is working
+  // response.json({ test: 123 });
+
+  //in the NeDB doc. under finding doc. this find func will allow us to find things in the db, since we want to find everything we will give it an empty object. This function comes with 2 callbacks which is err, and data itself
+  database.find({}, (err, data) => {
+    //to respond to any err
+    if (err) {
+      response.end();
+      return;
+    }
+    response.json(data);
   });
 });

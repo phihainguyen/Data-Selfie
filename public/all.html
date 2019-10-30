@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Data Selfie</title>
+  </head>
+  <body>
+    <h1>Data Selfie App</h1>
+    <script>
+      getData();
+      //in this fetch() we are able to reuse the /api route because now we are doing a GET method not a POST
+      async function getData() {
+        const response = await fetch("/api");
+        const data = await response.json();
+
+        for (item of data) {
+          const root = document.createElement("div");
+          const mood = document.createElement("div");
+          const geo = document.createElement("div");
+          const date = document.createElement("div");
+
+          const dateStamp = new Date(item.timestamp).toLocaleString();
+
+          mood.textContent = `mood: ${item.mood}`;
+          geo.textContent = `Latitude: ${item.lat}°, Longitude: ${item.lon}°`;
+          date.textContent = `${dateStamp}`;
+          //or we can just put date.textContent = dateStamp;
+
+          root.append(mood, geo, date);
+          document.body.append(root);
+        }
+        console.log(data);
+      }
+    </script>
+  </body>
+</html>
