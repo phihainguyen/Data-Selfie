@@ -26,7 +26,7 @@
     <script src="../javascript/app.js"></script>
     <script>
       const inputText = document.querySelector("#inputText");
-      let userInput;
+
       if ("geolocation" in navigator) {
         console.log("it is available");
         //by making this callback an async function we can make the fetch function await
@@ -36,24 +36,15 @@
           // console.log(position.coords.longitude);
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;
-          userInput = inputText.value;
           const input = (document.getElementById("lat").textContent = lat);
           document.getElementById("lon").textContent = lon;
 
-          //setting up the POST to send data which is longitude and lattitude in our case
-          const data = { lat, lon, userInput };
           //inorder to send a post we also need a second argument which is just a javascript object we will name it "option" and that way we can set it up as a variable as well
           //the first property we need to put in our object is the method, which could be GET, POST, DELETE, PUT, etc
           // there are various properties we can add to this object which is further specified inside of Fetch() MDN site
           // we will also need the body property which will convert the body of the post request, which is where all of the data is held, to json format for us, so it takes the object data and turns it into a json string
           //since we are sending the data in json format it is useful to specify that somehwere and that is why we will also addd the header property to our javascript object. THe header is something that can packaged along with any get/post req and move back and forth between client and server side which is a way to add additional meta information
-          const options = {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-          };
+
           //in our fetch function .then will handle the response from the server side after recieving information in our case we will just console log the response which is basically the info that was packaged in the json from the response.json()
           //but this will have .then() bring back the data as a data stream and not what you fed the response, in order to get around that we will handle this here on client side
           //
@@ -61,14 +52,22 @@
           submit.addEventListener("click", clickEvent);
 
           async function clickEvent() {
+            const userInput = inputText.value;
+
+            //setting up the POST to send data which is longitude and lattitude in our case
+            const data = { lat, lon, userInput };
+            const options = {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(data)
+            };
             const response = await fetch("/api", options);
             //to avoid getting a datastream as a response we will not use .then() to get back the data but an await which is why we comment out the bottom and added in a new variable that will store the response recieved on client side and store it in json() format.
             // .then(response => {
             //   console.log(response);
             const json = await response.json();
-            console.log(json);
-            console.log(inputText.value);
-            return (userInput = inputText.value);
           }
         });
       } else {
